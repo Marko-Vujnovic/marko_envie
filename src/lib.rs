@@ -6,7 +6,7 @@ pub fn nix_portable_exe() -> std::path::PathBuf { app_cache_folder().join("nix-p
 
 #[derive(PartialEq, Eq)]
 pub enum SandboxRuntime { Proot, Bwrap }
-static SANDBOX_TO_USE: SandboxRuntime = SandboxRuntime::Bwrap;
+pub static mut SANDBOX_TO_USE: SandboxRuntime = SandboxRuntime::Bwrap;
 
 pub async fn get_shell(env: &Environment) -> core::result::Result<std::process::Child, std::io::Error> {
     let nix_script = gen_a_nix_script(&env);
@@ -23,7 +23,7 @@ pub async fn get_shell(env: &Environment) -> core::result::Result<std::process::
     std::os::unix::fs::PermissionsExt::set_mode(&mut perms, 0o775);
     std::fs::set_permissions(nix_portable_exe_.to_str().unwrap(), perms)?;
     let startup_command =format!("bash");
-    let sandbox_to_use = if SANDBOX_TO_USE == SandboxRuntime::Bwrap { "bwrap" } else { "proot" };
+    let sandbox_to_use = if unsafe{SANDBOX_TO_USE == SandboxRuntime::Bwrap} { "bwrap" } else { "proot" };
     let cmd = format!(r#"NP_RUNTIME={} HOME=/home/{}/nixHome NIXPKGS_ALLOW_UNFREE=1 {} nix-shell /home/marko/envie/Environments/default.nix --verbose --pure --keep HOME --option sandbox false --command "echo 'Entered the Nix env'; export SSL_CERT_FILE=/nix/store/2ymr3vj3sxgcpvwnrfwpz8d2zar030gq-nss-cacert-3.74/etc/ssl/certs/ca-bundle.crt; export HOME=/home/$USER; {}""#, &sandbox_to_use, &os_username(), nix_portable_exe().to_str().unwrap(), startup_command);
     println_!(&cmd);
     let mut child = std::process::Command::new("bash") .args(["-i", "-c", &cmd])
