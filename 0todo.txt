@@ -1,0 +1,15 @@
+Extract into a library:
+    os_abstraction_layer
+        os_username
+            fn os_username() -> String
+            fn uid_to_username(uid: u32) -> core::option::Option<String>
+            fn geteuid_() -> u32
+        common_dirs
+            home_folder()
+            app_cache_folder()
+            app_config_folder()
+    formatless_print
+        println_!("str")
+        print_!("str")
+    marko_ez_downloader
+        download_file()

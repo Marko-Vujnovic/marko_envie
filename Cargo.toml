@@ -1,0 +1,17 @@
+[package]
+name = "envie"
+version = "0.1.0"
+authors = ["Marko Vujnovic"]
+edition = "2018"
+description="Envie is a Rust library, written by Marko Vujnovic, that makes it easy for your program to specify what runtime dependencies, such as libraries and CLI programs, it requires and envie will obtain them at the first run of your program. It accomplishes this in a distro-agnostic manner without requiring elevated privileges by using nix+proot/bwrap under the hood."
+license="GNU AGPLv3"
+repository="https://github.com/Marko-Vujnovic/envie"
+
+[dependencies]
+tokio = { version = "1.17.0", features = ["full"] } # For: async main()
+
+libc = "0.2.121" # For libc::geteuid()
+
+# For download_file()
+reqwest = { version = "0.11", features = ["stream"] }
+futures-util = "0.3.21"
