@@ -8,8 +8,8 @@ fn rustenv_t() -> core::result::Result<(), std::io::Error> { tokio::runtime::Run
         name: "Rust dev env with a very recent rustc version".to_string(),
         installed_packages: vec![
             "bash".to_string(),
-            "openssl".to_string(),
-            "jetbrains.idea-community".to_string(),
+            // "openssl".to_string(),
+            // "jetbrains.idea-community".to_string(),
             "nixpkgs_ToUseRustFrom.rustc".to_string(),
             "nixpkgs_ToUseRustFrom.cargo".to_string(),
         ],
